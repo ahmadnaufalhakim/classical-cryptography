@@ -27,6 +27,9 @@ class VigenereCipher :
         """
         Encrypt plaintext by given key using Vigenere Cipher algorithm
         """
+        if len(key) < 2 :
+            raise Exception("Key must be at least 2 characters long")
+
         plaintext = self.preprocess_text(plaintext)
         key = self.preprocess_text(key)
 
@@ -48,6 +51,9 @@ class VigenereCipher :
         """
         Decrypt ciphertext by given key using Vigenere Cipher algorithm
         """
+        if len(key) < 2 :
+            raise Exception("Key must be at least 2 characters long")
+
         ciphertext = self.preprocess_text(ciphertext)
         key = self.preprocess_text(key)
 
