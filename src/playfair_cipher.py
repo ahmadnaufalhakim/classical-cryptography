@@ -1,6 +1,5 @@
 import numpy as np
 import re
-import string
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
