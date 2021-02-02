@@ -63,31 +63,56 @@ class PlayfairCipher :
             new_plaintext += 'X'
 
         for i in range(0, len(new_plaintext), 2) :
-            a, b = np.where(self.playfair_square == new_plaintext[i])
-            x, y = np.where(self.playfair_square == new_plaintext[i+1])
-            if a == x :
-                encrypted += self.playfair_square[a][0][(b+1) % 5][0]
-                encrypted += self.playfair_square[x][0][(y+1) % 5][0]
-            elif b == y :
-                encrypted += self.playfair_square[(a+1) % 5][0][b][0]
-                encrypted += self.playfair_square[(x+1) % 5][0][y][0]
+            row_1, col_1 = np.where(self.playfair_square == new_plaintext[i])
+            row_2, col_2 = np.where(self.playfair_square == new_plaintext[i+1])
+            if row_1 == row_2 :
+                encrypted += self.playfair_square[row_1][0][(col_1+1) % 5][0]
+                encrypted += self.playfair_square[row_2][0][(col_2+1) % 5][0]
+            elif col_1 == col_2 :
+                encrypted += self.playfair_square[(row_1+1) % 5][0][col_1][0]
+                encrypted += self.playfair_square[(row_2+1) % 5][0][col_2][0]
             else :
-                encrypted += self.playfair_square[a][0][y][0]
-                encrypted += self.playfair_square[x][0][b][0]
+                encrypted += self.playfair_square[row_1][0][col_2][0]
+                encrypted += self.playfair_square[row_2][0][col_1][0]
 
         if spacing :
             encrypted = self.postprocess_text(encrypted)
 
         return encrypted
 
-    def decrypt(self, ciphertext, key, spacing=True) :
+    def decrypt(self, ciphertext, key, spacing=False) :
         """
         Decrypt ciphertext by given key using Playfair Cipher algorithm
         """
-        pass
+        ciphertext = self.preprocess_text(ciphertext)
+        self.generate_playfair_square(key)
 
-pc = PlayfairCipher()
-plaintext = "temui ibu nanti malam"
-key = "jalan ganesha sepuluh"
-encrypted = pc.encrypt(plaintext, key, True)
-print(encrypted)
+        decrypted = ''
+
+        for i in range(0, len(ciphertext), 2) :
+            row_1, col_1 = np.where(self.playfair_square == ciphertext[i])
+            row_2, col_2 = np.where(self.playfair_square == ciphertext[i+1])
+            if row_1 == row_2 :
+                decrypted += self.playfair_square[row_1][0][(col_1-1) % 5][0]
+                decrypted += self.playfair_square[row_2][0][(col_2-1) % 5][0]
+            elif col_1 == col_2 :
+                decrypted += self.playfair_square[(row_1-1) % 5][0][col_1][0]
+                decrypted += self.playfair_square[(row_2-1) % 5][0][col_2][0]
+            else :
+                decrypted += self.playfair_square[row_1][0][col_2][0]
+                decrypted += self.playfair_square[row_2][0][col_1][0]
+
+        decrypted = re.sub(r"[X]", '', decrypted)
+
+        if spacing :
+            decrypted = self.postprocess_text(decrypted)
+
+        return decrypted
+
+# pc = PlayfairCipher()
+# plaintext = "temui ibu nanti malam"
+# key = "jalan ganesha sepuluh"
+# encrypted = pc.encrypt(plaintext, key, True)
+# print(encrypted)
+# decrypted = pc.decrypt(encrypted, key, True)
+# print(decrypted)
