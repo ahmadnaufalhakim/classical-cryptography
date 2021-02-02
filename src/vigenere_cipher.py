@@ -27,6 +27,8 @@ class VigenereCipher :
         """
         Encrypt plaintext by given key using Vigenere Cipher algorithm
         """
+        if len(plaintext) == 0 :
+            raise Exception("Plaintext cannot be empty")
         if len(key) < 2 :
             raise Exception("Key must be at least 2 characters long")
 
