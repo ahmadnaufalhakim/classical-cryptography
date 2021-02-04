@@ -20,7 +20,7 @@ class ExtendedVigenereCipher:
         self.ciphertext = [ciphertext[i-spaces:i] for i in range(spaces, len(ciphertext)+spaces, spaces)]
         self.ciphertext = " ".join(self.ciphertext)
 
-    def encrypt(self, key, plaintext, spaces):
+    def encrypt(self, plaintext, key, spaces):
         self.key = key
         self.plaintext = plaintext
         self._generate_key_encrypt()
@@ -51,7 +51,7 @@ class ExtendedVigenereCipher:
         self.plaintext = [plaintext[i-spaces:i] for i in range(spaces, len(plaintext)+spaces, spaces)]
         self.plaintext = " ".join(self.plaintext)
 
-    def decrypt(self, key, ciphertext, spaces):
+    def decrypt(self, ciphertext, key, spaces):
         self.key = key
         self.ciphertext = ciphertext
         self._generate_key_decrypt()
