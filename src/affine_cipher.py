@@ -106,7 +106,7 @@ class AffineCipher :
 
         return decrypted
 
-ac = AffineCipher()
-print(ac.modulo_multiplicative_inverse(3,8))
-print(ac.encrypt("kripto", 7, 10))
-print(ac.decrypt("czolne", 7, 10))
+# ac = AffineCipher()
+# print(ac.modulo_multiplicative_inverse(3,8))
+# print(ac.encrypt("kripto", 7, 10))
+# print(ac.decrypt("czolne", 7, 10))
