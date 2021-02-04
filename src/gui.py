@@ -90,8 +90,11 @@ class Gui:
 		self.btn_openfile_ciphertext = Button(self.window, text="Open File Ciphertext", command=self.choose_ciphertext_file)
 		self.btn_openfile_ciphertext.grid(column=2, row=7, sticky=E, pady=(20, 5), padx=20)
 	
-		self.btn_savefile_ciphertext = Button(self.window, text="Save File Ciphertext", width=70, command=self.save_ciphertext_file)
-		self.btn_savefile_ciphertext.grid(column=0, sticky=S, pady=(20, 5), padx=20, columnspan=3)
+		self.btn_savefile_plaintext = Button(self.window, text="Save File Plaintext", width=20, command=self.save_plaintext_file)
+		self.btn_savefile_plaintext.grid(column=0, padx=20, sticky=S, columnspan=3)
+
+		self.btn_savefile_ciphertext = Button(self.window, text="Save File Ciphertext", width=20, command=self.save_ciphertext_file)
+		self.btn_savefile_ciphertext.grid(column=0, padx=20, sticky=S, columnspan=3)
 
 	def handler(self, event):
 		current = self.combobox_algorithms.current()
@@ -171,11 +174,19 @@ class Gui:
 		filename = filedialog.askopenfilename()
 		if filename != '' :
 			file = open(filename, "rb")
-			content = file.read()
+			content = file.read().decode()
 			self.ciphertext.delete("1.0", END)
 			self.ciphertext.insert("1.0", content)
 			file.close()
 
+	def save_plaintext_file(self) :
+		filename = filedialog.asksaveasfilename()
+		if filename != '' :
+			file = open(filename, "wb")
+			content = self.plaintext.get("1.0", "end-1c")
+			file.write(bytes(content.encode()))
+			file.close()
+	
 	def save_ciphertext_file(self) :
 		filename = filedialog.asksaveasfilename()
 		if filename != '' :
