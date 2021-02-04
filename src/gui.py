@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import scrolledtext
 from tkinter import ttk
 from tkinter import filedialog
+from tkinter import messagebox
 from vigenere_cipher import VigenereCipher
 from full_vigenere_cipher import FullVigenereCipher
 from autokey_vigenere_cipher import AutokeyVigenereCipher
@@ -14,7 +15,7 @@ class Gui:
 	def __init__(self):
 		self.window = Tk()
 		self.window.title("Tugas Kecil 1 IF4020 - 13517055 13517139")
-		self.window.geometry('640x590')
+		self.window.geometry('640x620')
 		self.window.resizable(False, False)
 
 		self.label_plaintext = Label(self.window, text="Plaintext")
@@ -57,9 +58,6 @@ class Gui:
 		self.key = Entry(self.window, width=40)
 		self.key.grid(column=1, row=4, sticky=W)
 
-		# self.label_n_transpotition = Label(self.window, text='n_transpotition :')
-		# self.n_transpotition = Entry(self.window, width=40)
-
 		self.label_m = Label(self.window, text='m :')
 		self.m = Entry(self.window, width=40)
 
@@ -69,8 +67,13 @@ class Gui:
 		self.label_spaces = Label(self.window, text='Spaces :')
 		self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
 
-		self.spaces = Entry(self.window, width=40)
-		self.spaces.grid(column=1, row=5, sticky=W)
+		self.is_spaces = BooleanVar(value=False)
+
+		self.spaces_0 = Radiobutton(self.window, text="No spaces", variable=self.is_spaces, value=False)
+		self.spaces_0.grid(column=1, row=5, sticky=W)
+
+		self.spaces_5 = Radiobutton(self.window, text="5 letter groups", variable=self.is_spaces, value=True)
+		self.spaces_5.grid(column=2, row=5, sticky=W)
 
 		self.btn_encrypt = Button(self.window, text="Encrypt", width=15, command=self.encrypt_clicked)
 		self.btn_encrypt.grid(column=2, row=3, sticky='E', padx=20)
@@ -88,7 +91,7 @@ class Gui:
 		self.btn_openfile_ciphertext.grid(column=2, row=7, sticky=E, pady=(20, 5), padx=20)
 	
 		self.btn_savefile_ciphertext = Button(self.window, text="Save File Ciphertext", width=70, command=self.save_ciphertext_file)
-		self.btn_savefile_ciphertext.grid(column=0, row=9, sticky='', pady=(20, 5), padx=20, columnspan=3)
+		self.btn_savefile_ciphertext.grid(column=0, sticky=S, pady=(20, 5), padx=20, columnspan=3)
 
 	def handler(self, event):
 		current = self.combobox_algorithms.current()
@@ -102,6 +105,11 @@ class Gui:
 
 			self.label_key.grid_remove()
 			self.key.grid_remove()
+
+			self.label_spaces.grid(column=0, row=6, sticky=W, padx=10)
+			self.spaces_0.grid(column=1, row=6, sticky=W)
+			self.spaces_5.grid(column=2, row=6, sticky=W)
+		
 		else:
 			self.label_m.grid_remove()
 			self.m.grid_remove()
@@ -112,219 +120,43 @@ class Gui:
 			self.label_key.grid(column=0, row=4, sticky=W, padx=10)
 			self.key.grid(column=1, row=4, sticky=W)
 		
-		self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
-		self.spaces.grid(column=1, row=5, sticky=W)
+			self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
+			self.spaces_0.grid(column=1, row=5, sticky=W)
+			self.spaces_5.grid(column=2, row=5, sticky=W)
 
-		# if current == 0 : # Vigenere
-			# self.label_key.grid(column=0, row=4, sticky=W, padx=10)
-			# self.key.grid(column=1, row=4, sticky=W)
-			
-			# self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
-			# self.spaces.grid(column=1, row=5, sticky=W)
-
-			# self.label_n_transpotition.grid_remove()
-			# self.n_transpotition.grid_remove()
-
-			# self.label_m.grid_remove()
-			# self.m.grid_remove()
-
-			# self.label_b.grid_remove()
-			# self.b.grid_remove()
-		# elif current == 1 : # Full Vigenere
-		# 	self.label_key.grid(column=0, row=4, sticky=W, padx=10)
-		# 	self.key.grid(column=1, row=4, sticky=W)
-
-		# 	self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
-		# 	self.spaces.grid(column=1, row=5, sticky=W)
-
-		# 	self.label_n_transpotition.grid_remove()
-		# 	self.n_transpotition.grid_remove()
-
-		# 	self.label_m.grid_remove()
-		# 	self.m.grid_remove()
-
-		# 	self.label_b.grid_remove()
-		# 	self.b.grid_remove()
-		# elif current == 2 : # Auto-key Vigenere
-		# 	self.label_key.grid(column=0, row=4, sticky=W, padx=10)
-		# 	self.key.grid(column=1, row=4, sticky=W)
-
-		# 	self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
-		# 	self.spaces.grid(column=1, row=5, sticky=W)
-
-		# 	self.label_n_transpotition.grid_remove()
-		# 	self.n_transpotition.grid_remove()
-
-		# 	self.label_m.grid_remove()
-		# 	self.m.grid_remove()
-
-		# 	self.label_b.grid_remove()
-		# 	self.b.grid_remove()
-		# elif current == 3 : # Extended Vigenere
-		# 	self.label_key.grid(column=0, row=4, sticky=W, padx=10)
-		# 	self.key.grid(column=1, row=4, sticky=W)
-
-		# 	self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
-		# 	self.spaces.grid(column=1, row=5, sticky=W)
-		# 	self.spaces.insert("1", "0")
-		# 	self.spaces.config(state=DISABLED)
-
-		# 	self.label_n_transpotition.grid_remove()
-		# 	self.n_transpotition.grid_remove()
-
-		# 	self.label_m.grid_remove()
-		# 	self.m.grid_remove()
-
-		# 	self.label_b.grid_remove()
-		# 	self.b.grid_remove()
-		# elif current == 4 : # Playfair
-		# 	self.label_key.grid(column=0, row=4, sticky=W, padx=10)
-		# 	self.key.grid(column=1, row=4, sticky=W)
-
-		# 	self.label_spaces.grid(column=0, row=5, sticky=W, padx=10)
-		# 	self.spaces.grid(column=1, row=5, sticky=W)
-
-		# 	self.label_n_transpotition.grid_remove()
-		# 	self.n_transpotition.grid_remove()
-
-		# 	self.label_m.grid_remove()
-		# 	self.m.grid_remove()
-
-		# 	self.label_b.grid_remove()
-		# 	self.b.grid_remove()
-		# elif current == 5 : # Affine
-		# 	self.label_m.grid(column=0, row=4, sticky=W, padx=10)
-		# 	self.m.grid(column=1, row=4, sticky=W)
-
-		# 	self.label_b.grid(column=0, row=5, sticky=W, padx=10)
-		# 	self.b.grid(column=1, row=5, sticky=W)
-
-		# 	self.label_spaces.grid(column=0, row=6, sticky=W, padx=10)
-		# 	self.spaces.grid(column=1, row=6, sticky=W)
-
-		# 	self.label_key.grid_remove()
-		# 	self.key.grid_remove()
-
-		# 	self.label_n_transpotition.grid_remove()
-		# 	self.n_transpotition.grid_remove()
-
-	def encrypt_clicked(self) :
+	def encrypt_clicked(self):
 		current = self.combobox_algorithms.current()
 		plaintext = self.plaintext.get("1.0", "end-1c")
-		key = self.key.get()
-		spaces = int(self.spaces.get())
+		spaces = self.is_spaces.get()
 
-		ciphertext = self.ciphers[current].encrypt(plaintext, key, spaces)
-		print(ciphertext)
+		try:
+			if current == 5:
+				ciphertext = self.ciphers[current].encrypt(plaintext, int(self.m.get()), int(self.b.get()), spaces)
+			else:
+				ciphertext = self.ciphers[current].encrypt(plaintext, self.key.get(), spaces)
+		except Exception as e:
+			ciphertext = ''
+			messagebox.showerror("Error", e)
+
 		self.ciphertext.delete("1.0", END)
 		self.ciphertext.insert("1.0", ciphertext)
-		# if current == 0 : # Vigenere
-		# 	plaintext = self.plaintext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-
-		# 	ciphertext = self.VigenereStandard.encrypt(key, plaintext, spaces)
-		# 	self.ciphertext.delete("1.0", END)
-		# 	self.ciphertext.insert("1.0", ciphertext)
-
-		# elif current == 1 : # Full Vigenere
-		# 	plaintext = self.plaintext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-			
-		# 	ciphertext = self.FullVigenere.encrypt_full_vigenere(plaintext, key, spaces)
-		# 	self.ciphertext.delete("1.0", END)
-		# 	self.ciphertext.insert("1.0", ciphertext)
-		# elif current == 2 : # Auto-key Vigenere
-		# 	plaintext = self.plaintext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-
-		# 	ciphertext, key_fix = self.AutoKeyVigenere.encrypt_auto_key_vigenere(plaintext, key, spaces)
-		# 	self.ciphertext.delete("1.0", END)
-		# 	self.ciphertext.insert("1.0", ciphertext)
-			
-		# 	print("key for decrypt : ", key_fix)
-		# elif current == 3 : # Extended Vigenere
-		# 	plaintext = self.plaintext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-
-		# 	ciphertext = self.VigenereExtended.encrypt(key, plaintext, 0)
-		# 	self.ciphertext.delete("1.0", END)
-		# 	self.ciphertext.insert("1.0", ciphertext)
-
-		# elif current == 4 : # Playfair
-		# 	plaintext = self.plaintext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-			
-		# 	ciphertext = self.PlayFair.encrypt_playfair(plaintext, key, spaces)
-		# 	self.ciphertext.delete("1.0", END)
-		# 	self.ciphertext.insert("1.0", ciphertext)
-
-		# elif current == 5 : # Affine
-		# 	plaintext = self.plaintext.get("1.0", "end-1c")
-		# 	m = int(self.m.get())
-		# 	b = int(self.b.get())
-		# 	spaces = int(self.spaces.get())
-
-		# 	ciphertext = self.AffineChiper.encrypt_affine(plaintext, m, b, spaces)
-		# 	self.ciphertext.delete("1.0", END)
-		# 	self.ciphertext.insert("1.0", ciphertext)
 
 	def decrypt_clicked(self):
 		current = self.combobox_algorithms.current()
-		
-		# if current == 0 : # Vigenere
-		# 	ciphertext = self.ciphertext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-			
-		# 	plaintext = self.VigenereStandard.decrypt(key, ciphertext, spaces)	
-		# 	self.plaintext.delete("1.0", END)
-		# 	self.plaintext.insert("1.0", plaintext)
-		# elif current == 1 : # Full Vigenere
-		# 	ciphertext = self.ciphertext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-			
-		# 	plaintext = self.FullVigenere.decrypt_full_vigenere(ciphertext, key, spaces)	
-		# 	self.plaintext.delete("1.0", END)
-		# 	self.plaintext.insert("1.0", plaintext)
-		# elif current == 2 : # Auto-key Vigenere
-		# 	ciphertext = self.ciphertext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-			
-		# 	plaintext = self.AutoKeyVigenere.decrypt_auto_key_vigenere(ciphertext, key, spaces)	
-		# 	self.plaintext.delete("1.0", END)
-		# 	self.plaintext.insert("1.0", plaintext)
-		# elif current == 3 : # Extended Vigenere
-		# 	ciphertext = self.ciphertext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-			
-		# 	plaintext = self.VigenereExtended.decrypt(key, ciphertext, 0)	
-		# 	self.plaintext.delete("1.0", END)
-		# 	self.plaintext.insert("1.0", plaintext)
+		ciphertext = self.ciphertext.get("1.0", "end-1c")
+		spaces = self.is_spaces.get()
 
-		# elif current == 4 : # Playfair
-		# 	ciphertext = self.ciphertext.get("1.0", "end-1c")
-		# 	key = self.key.get()
-		# 	spaces = int(self.spaces.get())
-			
-		# 	plaintext = self.PlayFair.decrypt_playfair(ciphertext, key, spaces)	
-		# 	self.plaintext.delete("1.0", END)
-		# 	self.plaintext.insert("1.0", plaintext)
+		try:
+			if current == 5:
+				plaintext = self.ciphers[current].decrypt(ciphertext, int(self.m.get()), int(self.b.get()), spaces)
+			else:
+				plaintext = self.ciphers[current].decrypt(ciphertext, self.key.get(), spaces)
+		except Exception as e:
+			plaintext = ''
+			messagebox.showerror("Error", e)
 
-		# elif current == 5 : # Affine
-		# 	ciphertext = self.ciphertext.get("1.0", "end-1c")
-		# 	m = int(self.m.get())
-		# 	b = int(self.b.get())
-		# 	spaces = int(self.spaces.get())
-			
-		# 	plaintext = self.AffineChiper.decrypt_affine(ciphertext, m, b, spaces)	
-		# 	self.plaintext.delete("1.0", END)
-		# 	self.plaintext.insert("1.0", plaintext)
+		self.plaintext.delete("1.0", END)
+		self.plaintext.insert("1.0", plaintext)
 
 	def choose_plaintext_file(self) :
 		filename = filedialog.askopenfilename()
@@ -355,4 +187,3 @@ class Gui:
 if __name__ == "__main__":
    gui = Gui()
    gui.window.mainloop()
-   
