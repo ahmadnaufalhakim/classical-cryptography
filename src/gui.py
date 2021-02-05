@@ -14,7 +14,7 @@ import string
 class Gui:
 	def __init__(self):
 		self.window = Tk()
-		self.window.title("Tugas Kecil 1 IF4020 - 13517055 13517139")
+		self.window.title("Tugas Kecil 1 II4031 - 13517055 13517139")
 		self.window.geometry('640x620')
 		self.window.resizable(False, False)
 
